@@ -167,13 +167,13 @@ namespace Mirror.Examples.TopDownShooter
         {
             soundGunShot.Play();
             muzzleFlash.SetActive(true);
-            if (isLocalPlayer)
+            if (hasAuthority)
             {
                 canvasTopDown.shotMarker.SetActive(true);
             }
             yield return new WaitForSeconds(0.1f);
             muzzleFlash.SetActive(false);
-            if (isLocalPlayer)
+            if (hasAuthority)
             {
                 canvasTopDown.shotMarker.SetActive(false);
             }
@@ -231,7 +231,7 @@ namespace Mirror.Examples.TopDownShooter
         {
 #if !UNITY_SERVER
             // all players get your latest kill data, however only local player updates their UI
-            if (isLocalPlayer)
+            if (hasAuthority)
             {
                 canvasTopDown.UpdateKillsUI(kills);
             }
@@ -294,7 +294,7 @@ namespace Mirror.Examples.TopDownShooter
                     obj.SetActive(true);
                 }
                 characterController.enabled = true;
-                if (isLocalPlayer)
+                if (hasAuthority)
                 {
                     this.transform.position = NetworkManager.startPositions[Random.Range(0, NetworkManager.startPositions.Count)].position;
                     canvasTopDown.buttonRespawnPlayer.gameObject.SetActive(false);
@@ -308,7 +308,7 @@ namespace Mirror.Examples.TopDownShooter
                     obj.SetActive(false);
                 }
                 characterController.enabled = false;
-                if (isLocalPlayer)
+                if (hasAuthority)
                 {
                     canvasTopDown.buttonRespawnPlayer.gameObject.SetActive(true);
                 }

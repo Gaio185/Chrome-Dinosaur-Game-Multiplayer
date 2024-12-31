@@ -20,10 +20,10 @@ namespace Mirror.Examples.MultipleAdditiveScenes
 
         void OnGUI()
         {
-            if (!isServerOnly && !isLocalPlayer && clientMatchIndex < 0)
+            if (!isServerOnly && !hasAuthority && clientMatchIndex < 0)
                 clientMatchIndex = NetworkClient.connection.identity.GetComponent<PlayerScore>().matchIndex;
 
-            if (isLocalPlayer || matchIndex == clientMatchIndex)
+            if (hasAuthority || matchIndex == clientMatchIndex)
                 GUI.Box(new Rect(10f + (scoreIndex * 110), 10f, 100f, 25f), $"P{playerNumber}: {score}");
         }
     }

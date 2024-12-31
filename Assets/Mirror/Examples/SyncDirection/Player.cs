@@ -32,7 +32,7 @@ namespace Mirror.Examples.SyncDir // ".SyncDirection" would overshadow the enum
             // try to change SyncDirection to ServerToClient in the editor.
             // then restart the game, clients won't be allowed to change their
             // own health anymore.
-            if (isLocalPlayer)
+            if (hasAuthority)
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                     ++health;
@@ -45,7 +45,7 @@ namespace Mirror.Examples.SyncDir // ".SyncDirection" would overshadow the enum
         // show instructions
         void OnGUI()
         {
-            if (!isLocalPlayer) return;
+            if (!hasAuthority) return;
 
             int width = 250;
             int height = 50;
