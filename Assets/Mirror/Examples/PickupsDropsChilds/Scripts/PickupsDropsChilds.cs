@@ -55,7 +55,7 @@ namespace Mirror.Examples.PickupsDropsChilds
 
         void Update()
         {
-            if (!isLocalPlayer) return;
+            if (!hasAuthority) return;
 
             if (Input.GetKeyDown(KeyCode.Alpha0) && equippedItem != EquippedItem.nothing)
                 CmdChangeEquippedItem(EquippedItem.nothing);

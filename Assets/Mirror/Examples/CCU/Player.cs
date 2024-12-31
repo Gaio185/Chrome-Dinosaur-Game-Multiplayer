@@ -86,7 +86,7 @@ namespace Mirror.Examples.CCU
 
         void Update()
         {
-            if (!isLocalPlayer) return;
+            if (!hasAuthority) return;
 
             // player may interrupt auto movement to switch to manual
             if (Interrupted()) autoMove = false;

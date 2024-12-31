@@ -11,7 +11,7 @@ namespace Mirror.Examples.PredictionBenchmark
 
         void Update()
         {
-            if (!isLocalPlayer) return;
+            if (!hasAuthority) return;
 
             if (Input.GetMouseButtonDown(0))
             {
