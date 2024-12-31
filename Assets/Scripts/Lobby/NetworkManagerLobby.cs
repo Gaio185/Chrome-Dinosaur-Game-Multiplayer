@@ -21,29 +21,42 @@ public class NetworkManagerLobby : NetworkManager
         OnClientConnected?.Invoke();
     }
 
+    public override void OnClientDisconnect()
+    {
+        Debug.Log("Player Disconnected 3");
+        base.OnClientDisconnect();
+
+        OnClientDisconnected?.Invoke();
+    }
+
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
-        if(numPlayers >= maxConnections)
+        if(numPlayers > maxConnections)
         {
+            Debug.Log("Player Disconnected 2");
             conn.Disconnect();
             return;
         }
 
-        if (SceneManager.GetActiveScene().name != menuScene)
-        {
-            conn.Disconnect();
-            return;
-        }
+        //if (SceneManager.GetActiveScene().name != menuScene)
+        //{
+        //    Debug.Log("Player Disconnected 1");
+        //    conn.Disconnect();
+        //    return;
+        //}
     }
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
-        if(SceneManager.GetActiveScene().name == menuScene)
-        {
-            NetworkRoomPlayerLobby roomPlayerInstance = Instantiate(roomPlayerPrefab);
+        //if(SceneManager.GetActiveScene().name == menuScene)
+        //{
+        //    NetworkRoomPlayerLobby roomPlayerInstance = Instantiate(roomPlayerPrefab);
 
-            NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
-        }
+        //    NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
+        //}
+
+        NetworkRoomPlayerLobby roomPlayerInstance = Instantiate(roomPlayerPrefab);
+        NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
     }
 
 }
