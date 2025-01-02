@@ -123,14 +123,18 @@ public class NetworkManagerLobby : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
-        for (int i = RoomPlayers.Count - 1; i >= 0; i--)
+        if(SceneManager.GetActiveScene().name == "Lobby" && newSceneName == "GameScene")
         {
-            var conn = RoomPlayers[i].connectionToClient;
-            var gameplayerInstance = Instantiate(gamePlayerPrefab);
-            gameplayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
+            for (int i = RoomPlayers.Count - 1; i >= 0; i--)
+            {
+                var conn = RoomPlayers[i].connectionToClient;
+                var gameplayerInstance = Instantiate(gamePlayerPrefab);
+                gameplayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
 
-            NetworkServer.Destroy(conn.identity.gameObject);
-            NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject, ReplacePlayerOptions.KeepActive);
+                NetworkServer.Destroy(conn.identity.gameObject);
+
+                NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject);
+            }
         }
 
         base.ServerChangeScene(newSceneName);

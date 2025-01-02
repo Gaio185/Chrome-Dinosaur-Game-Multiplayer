@@ -47,5 +47,4 @@ public class PlayerSpawnSystem : NetworkBehaviour
         NetworkServer.Spawn(playerInstance, conn);
         nextIndex++;
     }
-    
 }

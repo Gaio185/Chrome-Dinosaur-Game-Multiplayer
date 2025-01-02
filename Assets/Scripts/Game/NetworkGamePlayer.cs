@@ -22,7 +22,8 @@ public class NetworkGamePlayer : NetworkBehaviour
 
     public override void OnStartClient()
     {
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
+
         Room.GamePlayers.Add(this);
     }
 
