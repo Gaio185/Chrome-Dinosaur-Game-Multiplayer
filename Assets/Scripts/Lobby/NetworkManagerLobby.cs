@@ -14,9 +14,11 @@ public class NetworkManagerLobby : NetworkManager
 
     [Header("Game")]
     [SerializeField] private NetworkGamePlayer gamePlayerPrefab = null;
+    [SerializeField] private GameObject playerSpawnSystem = null;
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
+    public static event Action<NetworkConnectionToClient> OnServerReadied;
 
     public List<NetworkRoomPlayerLobby> RoomPlayers { get; } = new List<NetworkRoomPlayerLobby>();
     public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
@@ -128,10 +130,25 @@ public class NetworkManagerLobby : NetworkManager
             gameplayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
 
             NetworkServer.Destroy(conn.identity.gameObject);
-
-            NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject);
+            NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject, ReplacePlayerOptions.KeepActive);
         }
 
         base.ServerChangeScene(newSceneName);
+    }
+
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        if(sceneName == "GameScene")
+        {
+            GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
+            NetworkServer.Spawn(playerSpawnSystemInstance);
+        }
+    }
+
+    public override void OnServerReady(NetworkConnectionToClient conn)
+    {
+        base.OnServerReady(conn);
+
+        OnServerReadied?.Invoke(conn);
     }
 }

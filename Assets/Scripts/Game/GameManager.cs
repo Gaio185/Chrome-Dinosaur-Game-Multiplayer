@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
+using Mirror.BouncyCastle.Security;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,8 +20,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI hiScoreText;
     public TextMeshProUGUI hiScoreLabel;
 
-    private Player player;
-    private ObjectSpawner spawner;
+    private List<Player> playerList = new List<Player>();
+    [SerializeField] private ObjectSpawner spawner;
 
     private float score = 0;
     private float hiScore = 0;
@@ -47,14 +48,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        player = FindObjectOfType<Player>();
-        spawner = FindObjectOfType<ObjectSpawner>();
         NewGame();
     }
 
     public void NewGame()
     {
         Obstacle[] obstacles = FindObjectsOfType<Obstacle>();
+        GetAllPlayers();
 
         foreach(Obstacle obstacle in obstacles)
         {
@@ -65,7 +65,10 @@ public class GameManager : MonoBehaviour
         score = 0;
         enabled = true;
 
-        player.gameObject.SetActive(true);
+        foreach(var p in playerList)
+        {
+            p.gameObject.SetActive(true);
+        }
         spawner.gameObject.SetActive(true);
         gameOverText.gameObject.SetActive(false);
         retryButton.gameObject.SetActive(false);   
@@ -76,7 +79,10 @@ public class GameManager : MonoBehaviour
         gameSpeed = 0f;
         enabled = false;
 
-        player.gameObject.SetActive(false);
+        foreach(var p in playerList)
+        {
+            p.gameObject.SetActive(false);
+        }
         spawner.gameObject.SetActive(false);
         gameOverText.gameObject.SetActive(true);
         retryButton.gameObject.SetActive(true);
@@ -92,5 +98,28 @@ public class GameManager : MonoBehaviour
         gameSpeed += gameSpeedIncrease * Time.deltaTime;
         score += gameSpeed * Time.deltaTime;
         scoreText.text = Mathf.FloorToInt(score).ToString("D5");
+    }
+
+    [Server]
+    public void GetAllPlayers()
+    {
+        Invoke(nameof(FindPlayers), 1f); 
+    }
+
+    public void FindPlayers()
+    {
+        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+
+        playerList = new List<Player>();
+        foreach (var playerObject in allPlayers)
+        {
+            Player playerScript = playerObject.GetComponent<Player>(); 
+            if (playerScript != null)
+            {
+                playerList.Add(playerScript);
+            }
+        }
+
+        Debug.Log("Found " + playerList.Count + " players.");
     }
 }
