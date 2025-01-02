@@ -11,15 +11,11 @@ public class Player : MonoBehaviour
     public float gravity = 9.81f * 2f;
     public float jumpForce = 8f;
 
-    public float moveSpeed = 5f;  
-    //public LayerMask groundLayer;
+    public float moveSpeed = 5f;
 
     private float score;
 
-    public TextMeshProUGUI scoreText;
-
-    private Rigidbody2D rb;             
-    [SerializeField] private bool isGrounded = true;            
+    public TextMeshProUGUI scoreText;      
 
     private void Awake()
     {
@@ -34,16 +30,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-
-        //isGrounded = Physics2D.OverlapCircle(gameObject.transform.position, 0.3f, groundLayer);
-
-        //float horizontalInput = Input.GetAxisRaw("Horizontal"); 
-        //rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
-
-        //if (isGrounded && Input.GetKeyDown(KeyCode.Space)) 
-        //{
-        //    rb.velocity = new Vector2(rb.velocity.x, jumpForce); 
-        //}
 
         if (characterController.isGrounded)
         {
