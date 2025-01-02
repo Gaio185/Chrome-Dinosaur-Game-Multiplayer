@@ -2712,7 +2712,6 @@ GameObject:
   - component: {fileID: 1474226456}
   - component: {fileID: 1474226459}
   - component: {fileID: 1474226458}
-  - component: {fileID: 1474226460}
   m_Layer: 0
   m_Name: LobbyNetworkManager
   m_TagString: Untagged
@@ -2807,20 +2806,8 @@ MonoBehaviour:
   minPlayers: 2
   menuScene: Assets/Scenes/Lobby.unity
   roomPlayerPrefab: {fileID: 3362677513430324482, guid: aeaa8181d292c874ab499f9c8b7a808a, type: 3}
---- !u!114 &1474226460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474226454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0
+  gamePlayerPrefab: {fileID: 7777015226890634316, guid: 18d07242f25c45a40992b7b38660adc8, type: 3}
+  playerSpawnSystem: {fileID: 7383823103997503967, guid: 02a196cafb0cf51428664f71460d531f, type: 3}
 --- !u!1 &1594542232
 GameObject:
   m_ObjectHideFlags: 0
