@@ -61,7 +61,7 @@ public class Player : NetworkBehaviour
     {
         if (other.CompareTag("Obstacle"))
         {
-            GameManager.Instance.GameOver();
+            gameObject.SetActive(false);
         }
     }
 }

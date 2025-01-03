@@ -24,11 +24,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI hiScoreLabel;
 
     public List<Player> playerList = new List<Player>();
-    private List<AnimatedSprite> animatedSpriteList = new List<AnimatedSprite>();
 
     [SerializeField] private ObjectSpawner spawner;
     private float score = 0;
     private float hiScore = 0;
+
+    private bool shouldGameEnd;
 
     private void Awake()
     {
@@ -74,11 +75,6 @@ public class GameManager : MonoBehaviour
             p.gameObject.GetComponent<CharacterController>().enabled = true;
         }
 
-        foreach(var a in animatedSpriteList)
-        {
-            a.enabled = true;
-        }
-
         spawner.gameObject.SetActive(true);
         gameOverText.gameObject.SetActive(false);
         retryButton.gameObject.SetActive(false);   
@@ -92,11 +88,6 @@ public class GameManager : MonoBehaviour
         foreach(var p in playerList)
         {
             p.gameObject.SetActive(false);
-        }
-
-        foreach (var a in animatedSpriteList)
-        {
-            a.enabled = false;
         }
 
         spawner.gameObject.SetActive(false);
@@ -114,6 +105,19 @@ public class GameManager : MonoBehaviour
         gameSpeed += gameSpeedIncrease * Time.deltaTime;
         score += gameSpeed * Time.deltaTime;
         scoreText.text = Mathf.FloorToInt(score).ToString("D5");
+
+        foreach(var player in playerList)
+        {
+            if (!player.gameObject.activeSelf)
+            {
+                playerList.Remove(player);
+            }
+        }
+
+        if(playerList.Count <= 0)
+        {
+            GameOver();
+        }
     }
 
 }
