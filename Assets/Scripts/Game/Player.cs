@@ -1,17 +1,20 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     private CharacterController characterController;
     private Vector3 direction;
 
-    public float gravity = 9.81f * 2f;
-    public float jumpForce = 8f;
+    private Vector3 previousInput;
 
-    public float moveSpeed = 5f;
+    [SerializeField] private float gravity = 9.81f * 2f;
+    [SerializeField] private float jumpForce = 8f;
+    [SerializeField] private float moveSpeed = 5f;
 
     private float score;
 
@@ -22,12 +25,17 @@ public class Player : MonoBehaviour
         characterController = GetComponent<CharacterController>();
     }
 
+    [ClientCallback]
     private void OnEnable()
     {
         direction = Vector3.zero;
     }
 
-    void Update()
+    [ClientCallback]
+    void Update() => Move();
+
+    [Client]
+    private void Move()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
 

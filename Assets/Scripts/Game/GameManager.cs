@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using Mirror.BouncyCastle.Security;
+using Mirror.BouncyCastle.Asn1.BC;
+using System;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,9 +23,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI hiScoreText;
     public TextMeshProUGUI hiScoreLabel;
 
-    private List<Player> playerList = new List<Player>();
-    [SerializeField] private ObjectSpawner spawner;
+    public List<Player> playerList = new List<Player>();
+    private List<AnimatedSprite> animatedSpriteList = new List<AnimatedSprite>();
 
+    [SerializeField] private ObjectSpawner spawner;
     private float score = 0;
     private float hiScore = 0;
 
@@ -40,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(Instance == this)
+        if (Instance == this)
         {
             Instance = null;
         }
@@ -54,7 +58,6 @@ public class GameManager : MonoBehaviour
     public void NewGame()
     {
         Obstacle[] obstacles = FindObjectsOfType<Obstacle>();
-        GetAllPlayers();
 
         foreach(Obstacle obstacle in obstacles)
         {
@@ -67,8 +70,15 @@ public class GameManager : MonoBehaviour
 
         foreach(var p in playerList)
         {
-            p.gameObject.SetActive(true);
+            if(!p.gameObject.activeSelf) p.gameObject.SetActive(true);
+            p.gameObject.GetComponent<CharacterController>().enabled = true;
         }
+
+        foreach(var a in animatedSpriteList)
+        {
+            a.enabled = true;
+        }
+
         spawner.gameObject.SetActive(true);
         gameOverText.gameObject.SetActive(false);
         retryButton.gameObject.SetActive(false);   
@@ -83,6 +93,12 @@ public class GameManager : MonoBehaviour
         {
             p.gameObject.SetActive(false);
         }
+
+        foreach (var a in animatedSpriteList)
+        {
+            a.enabled = false;
+        }
+
         spawner.gameObject.SetActive(false);
         gameOverText.gameObject.SetActive(true);
         retryButton.gameObject.SetActive(true);
@@ -100,26 +116,4 @@ public class GameManager : MonoBehaviour
         scoreText.text = Mathf.FloorToInt(score).ToString("D5");
     }
 
-    [Server]
-    public void GetAllPlayers()
-    {
-        Invoke(nameof(FindPlayers), 1f); 
-    }
-
-    public void FindPlayers()
-    {
-        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
-
-        playerList = new List<Player>();
-        foreach (var playerObject in allPlayers)
-        {
-            Player playerScript = playerObject.GetComponent<Player>(); 
-            if (playerScript != null)
-            {
-                playerList.Add(playerScript);
-            }
-        }
-
-        Debug.Log("Found " + playerList.Count + " players.");
-    }
 }
