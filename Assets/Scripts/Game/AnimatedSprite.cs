@@ -9,13 +9,14 @@ public class AnimatedSprite : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private int frame;
 
-    private void Awake()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
+    //private void Awake()
+    //{
+        
+    //}
 
     private void OnEnable()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         Invoke(nameof(Animate), 0f);
     }
 

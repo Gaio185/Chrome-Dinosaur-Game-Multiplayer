@@ -1,49 +1,43 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     private CharacterController characterController;
     private Vector3 direction;
 
-    public float gravity = 9.81f * 2f;
-    public float jumpForce = 8f;
+    private Vector3 previousInput;
 
-    public float moveSpeed = 5f;  
-    //public LayerMask groundLayer;
+    [SerializeField] private float gravity = 9.81f * 2f;
+    [SerializeField] private float jumpForce = 8f;
+    [SerializeField] private float moveSpeed = 5f;
 
     private float score;
 
-    public TextMeshProUGUI scoreText;
-
-    private Rigidbody2D rb;             
-    [SerializeField] private bool isGrounded = true;            
+    public TextMeshProUGUI scoreText;      
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
     }
 
+    [ClientCallback]
     private void OnEnable()
     {
         direction = Vector3.zero;
     }
 
-    void Update()
+    [ClientCallback]
+    void Update() => Move();
+
+    [Client]
+    private void Move()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-
-        //isGrounded = Physics2D.OverlapCircle(gameObject.transform.position, 0.3f, groundLayer);
-
-        //float horizontalInput = Input.GetAxisRaw("Horizontal"); 
-        //rb.velocity = new Vector2(horizontalInput * moveSpeed, rb.velocity.y);
-
-        //if (isGrounded && Input.GetKeyDown(KeyCode.Space)) 
-        //{
-        //    rb.velocity = new Vector2(rb.velocity.x, jumpForce); 
-        //}
 
         if (characterController.isGrounded)
         {
@@ -67,7 +61,7 @@ public class Player : MonoBehaviour
     {
         if (other.CompareTag("Obstacle"))
         {
-            GameManager.Instance.GameOver();
+            gameObject.SetActive(false);
         }
     }
 }
