@@ -1,9 +1,10 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ObjectSpawner : MonoBehaviour
+public class ObjectSpawner : NetworkBehaviour
 {
     [System.Serializable]
     public struct SpawnableObject
@@ -21,25 +22,29 @@ public class ObjectSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke(nameof(Spawn), Random.Range(minSpawnRate, maxSpawnRate));
+        if (isServer)
+        {
+            Invoke(nameof(Spawn), Random.Range(minSpawnRate, maxSpawnRate));
+        }
     }
 
     private void Spawn()
     {
+        Debug.Log("Spawning object...");
+
         float spawnchance = Random.value;
 
         foreach (var obj in gameObjects)
         {
             if(spawnchance < obj.spawnChance)
             {
-                GameObject obstacle = Instantiate(obj.prefab);
-                obstacle.transform.position += transform.position;
+                GameObject obstacle = Instantiate(obj.prefab, transform.position, transform.rotation);
+                NetworkServer.Spawn(obstacle);
                 break;
             }
 
             spawnchance -= obj.spawnChance;
         }
-
         Invoke(nameof(Spawn), Random.Range(minSpawnRate,maxSpawnRate));
     }
 
@@ -48,9 +53,5 @@ public class ObjectSpawner : MonoBehaviour
         CancelInvoke();
     }
 
-    private void Update()
-    {
-        
-    }
 
 }
