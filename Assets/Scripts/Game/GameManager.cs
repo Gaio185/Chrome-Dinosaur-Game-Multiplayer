@@ -18,16 +18,14 @@ public class GameManager : MonoBehaviour
     public float gameSpeedIncrease = 0.1f;
 
     public TextMeshProUGUI gameOverText;
-    public Button retryButton;
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI hiScoreText;
-    public TextMeshProUGUI hiScoreLabel;
+    //public Button retryButton;
+    //public TextMeshProUGUI scoreText;
+    //public TextMeshProUGUI hiScoreText;
+    //public TextMeshProUGUI hiScoreLabel;
 
     public List<Player> playerList = new List<Player>();
 
     [SerializeField] private ObjectSpawner spawner;
-    private float score = 0;
-    private float hiScore = 0;
 
     private void Awake()
     {
@@ -75,7 +73,6 @@ public class GameManager : MonoBehaviour
         }
 
         gameSpeed = initialGameSpeed;
-        score = 0;
         enabled = true;
 
         foreach(var p in playerList)
@@ -85,8 +82,7 @@ public class GameManager : MonoBehaviour
         }
 
         spawner.enabled = true;
-        gameOverText.gameObject.SetActive(false);
-        retryButton.gameObject.SetActive(false);   
+        gameOverText.gameObject.SetActive(false);  
     }
 
     public void GameOver()
@@ -99,21 +95,13 @@ public class GameManager : MonoBehaviour
             p.gameObject.SetActive(false);
         }
 
-        spawner.gameObject.SetActive(false);
+        spawner.enabled=false;
         gameOverText.gameObject.SetActive(true);
-        retryButton.gameObject.SetActive(true);
-        if(hiScore < score)
-        {
-            hiScore = score;
-            hiScoreText.text = Mathf.FloorToInt(hiScore).ToString("D5");
-        }
     }
 
     private void Update()
     {
         gameSpeed += gameSpeedIncrease * Time.deltaTime;
-        score += gameSpeed * Time.deltaTime;
-        scoreText.text = Mathf.FloorToInt(score).ToString("D5");
 
         foreach(var player in playerList)
         {
