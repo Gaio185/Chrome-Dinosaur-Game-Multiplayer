@@ -29,8 +29,6 @@ public class GameManager : MonoBehaviour
     private float score = 0;
     private float hiScore = 0;
 
-    private bool shouldGameEnd;
-
     private void Awake()
     {
         if(Instance == null)
@@ -40,6 +38,17 @@ public class GameManager : MonoBehaviour
         else
         {
             DestroyImmediate(gameObject);
+        }
+    }
+
+    private void OnEnable()
+    {
+        playerList.Clear();
+        Player[] list = FindObjectsOfType<Player>();
+        foreach (Player p in list)
+        {
+            playerList.Add(p);
+            p.gameObject.GetComponent<AnimatedSprite>().enabled = true;
         }
     }
 
@@ -75,7 +84,7 @@ public class GameManager : MonoBehaviour
             p.gameObject.GetComponent<CharacterController>().enabled = true;
         }
 
-        spawner.gameObject.SetActive(true);
+        spawner.enabled = true;
         gameOverText.gameObject.SetActive(false);
         retryButton.gameObject.SetActive(false);   
     }

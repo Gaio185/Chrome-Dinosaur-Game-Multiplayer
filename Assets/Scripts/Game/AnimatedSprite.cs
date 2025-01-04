@@ -27,18 +27,23 @@ public class AnimatedSprite : MonoBehaviour
 
     private void Animate()
     {
-        frame++;
-
-        if (frame >= sprites.Length)
+        if (GameManager.Instance.enabled)
         {
-            frame = 0;
-        }
+            frame++;
 
-        if (frame >= 0 && frame < sprites.Length)
-        {
-            spriteRenderer.sprite = sprites[frame];
-        }
+            if (frame >= sprites.Length)
+            {
+                frame = 0;
+            }
 
-        Invoke(nameof(Animate), 1f/GameManager.Instance.gameSpeed);
+            if (frame >= 0 && frame < sprites.Length)
+            {
+                spriteRenderer.sprite = sprites[frame];
+            }
+
+            Invoke(nameof(Animate), 1f / GameManager.Instance.gameSpeed);
+
+        }
+        
     }
 }
