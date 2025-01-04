@@ -18,6 +18,9 @@ public class Player : NetworkBehaviour
     [SerializeField] private float jumpForce = 8f;
     [SerializeField] private float moveSpeed = 5f;
 
+    private Vector3 velocity;
+    private bool isGrounded;
+
     public override void OnStartAuthority()
     {
         enabled = true;
@@ -38,31 +41,43 @@ public class Player : NetworkBehaviour
     [Client]
     private void Move()
     {
-        //if (characterController.isGrounded)
-        //{
-        //    direction = new Vector3(horizontalInput * moveSpeed, -1f, 0f);
+        
+        isGrounded = characterController.isGrounded;
 
-        //    if (Input.GetButton("Jump"))
-        //    {
-        //        direction = Vector3.up * jumpForce;
-        //    }
-        //}
-        //else
-        //{
-        //    direction = new Vector3(horizontalInput * moveSpeed, direction.y, 0f);
-        //    direction += (Vector3.down * gravity * Time.deltaTime);
-        //}
+        
+        if (!isGrounded)
+        {
+            velocity.y -= gravity * Time.deltaTime;
 
-        //characterController.Move(direction * Time.deltaTime);
+        }
+        else
+        {
+            if (velocity.y < 0) velocity.y = -2f; 
+
+            if (Input.GetButton("Jump"))
+            {
+                Jump();
+            }
+        }
+
+        
         Vector3 movement = Vector3.zero;
         Vector3 right = characterController.transform.right;
-        Vector3 up = characterController.transform.up;
+        Vector3 forward = characterController.transform.forward;
 
         movement = (right.normalized * previousInput.x);
-     
 
-        characterController.Move(movement * moveSpeed * Time.deltaTime);
+        
+        characterController.Move(movement * moveSpeed * Time.deltaTime + velocity * Time.deltaTime);
+    }
 
+    [Client]
+    private void Jump()
+    {
+        if (isGrounded)
+        {
+            velocity.y = jumpForce; 
+        }
     }
 
     private void OnTriggerEnter(Collider other)
