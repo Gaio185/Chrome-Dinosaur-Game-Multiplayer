@@ -43,6 +43,13 @@ public class ObjectSpawner : NetworkBehaviour
                 break;
             }
 
+            if(minSpawnRate >= 0.2f && maxSpawnRate >= 0.5f)
+            {
+                minSpawnRate -= 0.01f;
+                maxSpawnRate -= 0.01f;
+            }
+            
+
             spawnchance -= obj.spawnChance;
         }
         Invoke(nameof(Spawn), Random.Range(minSpawnRate,maxSpawnRate));
