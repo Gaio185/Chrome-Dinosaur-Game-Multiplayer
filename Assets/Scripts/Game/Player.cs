@@ -59,6 +59,7 @@ public class Player : NetworkBehaviour
         Vector3 up = characterController.transform.up;
 
         movement = (right.normalized * previousInput.x);
+     
 
         characterController.Move(movement * moveSpeed * Time.deltaTime);
 
