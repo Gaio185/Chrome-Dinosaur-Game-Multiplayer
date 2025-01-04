@@ -43,6 +43,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        playerList.Clear();
+        Player[] list = FindObjectsOfType<Player>();
+        foreach (Player p in list)
+        {
+            playerList.Add(p);
+            p.gameObject.GetComponent<AnimatedSprite>().enabled = true;
+        }
+    }
+
     private void OnDestroy()
     {
         if (Instance == this)

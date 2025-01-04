@@ -1,14 +1,16 @@
 using Mirror;
+using Mirror.BouncyCastle.Asn1.Crmf;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using TMPro;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    private CharacterController characterController;
-    private Vector3 direction;
+    [SerializeField] private CharacterController characterController;
 
     private Vector3 previousInput;
 
@@ -16,45 +18,50 @@ public class Player : NetworkBehaviour
     [SerializeField] private float jumpForce = 8f;
     [SerializeField] private float moveSpeed = 5f;
 
-    private float score;
-
-    public TextMeshProUGUI scoreText;      
-
-    private void Awake()
+    public override void OnStartAuthority()
     {
-        characterController = GetComponent<CharacterController>();
-    }
+        enabled = true;
 
-    [ClientCallback]
-    private void OnEnable()
-    {
-        direction = Vector3.zero;
+        InputManager.Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<Vector2>());
+        InputManager.Controls.Player.Move.canceled += ctx => ResetMovement();
     }
-
+   
     [ClientCallback]
     void Update() => Move();
 
     [Client]
+    private void SetMovement(Vector2 movement) => previousInput = movement;
+
+    [Client]
+    private void ResetMovement() => previousInput = Vector2.zero;
+
+    [Client]
     private void Move()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
+        //if (characterController.isGrounded)
+        //{
+        //    direction = new Vector3(horizontalInput * moveSpeed, -1f, 0f);
 
-        if (characterController.isGrounded)
-        {
-            direction = new Vector3(horizontalInput * moveSpeed, -1f, 0f);
+        //    if (Input.GetButton("Jump"))
+        //    {
+        //        direction = Vector3.up * jumpForce;
+        //    }
+        //}
+        //else
+        //{
+        //    direction = new Vector3(horizontalInput * moveSpeed, direction.y, 0f);
+        //    direction += (Vector3.down * gravity * Time.deltaTime);
+        //}
 
-            if (Input.GetButton("Jump"))
-            {
-                direction = Vector3.up * jumpForce;
-            }
-        }
-        else
-        {
-            direction = new Vector3(horizontalInput * moveSpeed, direction.y, 0f);
-            direction += (Vector3.down * gravity * Time.deltaTime);
-        }
+        //characterController.Move(direction * Time.deltaTime);
+        Vector3 movement = Vector3.zero;
+        Vector3 right = characterController.transform.right;
+        Vector3 up = characterController.transform.up;
 
-        characterController.Move(direction * Time.deltaTime);
+        movement = (right.normalized * previousInput.x);
+
+        characterController.Move(movement * moveSpeed * Time.deltaTime);
+
     }
 
     private void OnTriggerEnter(Collider other)

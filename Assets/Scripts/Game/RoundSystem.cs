@@ -25,7 +25,6 @@ public class RoundSystem : NetworkBehaviour
     {
         NetworkManagerLobby.OnServerStopped += CleanUpServer;
         NetworkManagerLobby.OnServerReadied += CheckStartRound;
-        GetAllPlayers();
     }
 
     [ServerCallback]
@@ -60,15 +59,15 @@ public class RoundSystem : NetworkBehaviour
     private void RpcStartCountDown()
     {
         animator.enabled = true;
+        //GetAllPlayers();
     }
 
     [ClientRpc]
     private void RpcStartRound()
     {
-        UnlockPlayer();
-
-        GameManager.Instance.enabled = true;
+        InputManager.Remove(ActionMapNames.Player);
         GameManager.Instance.playerList = playerList;
+        GameManager.Instance.enabled = true;
     }
     #endregion
 
@@ -77,38 +76,27 @@ public class RoundSystem : NetworkBehaviour
         animator.enabled = false;
     }
 
-    [Server]
-    public void GetAllPlayers()
-    {
-        Invoke(nameof(FindPlayers), 1f);
-    }
+    //[ClientRpc]
+    //public void GetAllPlayers()
+    //{
+    //    Invoke(nameof(FindPlayers), 1f);
+    //}
 
-    public void FindPlayers()
-    {
-        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+    //public void FindPlayers()
+    //{
+    //    GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
 
-        playerList = new List<Player>();
-        foreach (var playerObject in allPlayers)
-        {
-            Player playerScript = playerObject.GetComponent<Player>();
-            AnimatedSprite animatedSprite = playerObject.GetComponent<AnimatedSprite>();
-            if (playerScript != null)
-            {
-                playerList.Add(playerScript);
-            }
-        }
+    //    playerList = new List<Player>();
+    //    foreach (var playerObject in allPlayers)
+    //    {
+    //        Player playerScript = playerObject.GetComponent<Player>();
+    //        AnimatedSprite animatedSprite = playerObject.GetComponent<AnimatedSprite>();
+    //        if (playerScript != null)
+    //        {
+    //            playerList.Add(playerScript);
+    //        }
+    //    }
 
-        Debug.Log("Found " + playerList.Count + " players.");
-    }
-
-    [Server]
-    public void UnlockPlayer()
-    {
-        foreach (var player in playerList)
-        {
-            player.gameObject.GetComponent<AnimatedSprite>().enabled = true;
-            player.gameObject.GetComponent<CharacterController>().enabled = true;
-        }
-    
-    }
+    //    Debug.Log("Found " + playerList.Count + " players.");
+    //}
 }

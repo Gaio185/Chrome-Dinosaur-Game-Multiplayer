@@ -2812,7 +2812,7 @@ MonoBehaviour:
   roomPlayerPrefab: {fileID: 3362677513430324482, guid: aeaa8181d292c874ab499f9c8b7a808a, type: 3}
   gamePlayerPrefab: {fileID: 7777015226890634316, guid: 18d07242f25c45a40992b7b38660adc8, type: 3}
   playerSpawnSystem: {fileID: 7383823103997503967, guid: 02a196cafb0cf51428664f71460d531f, type: 3}
-  gameManager: {fileID: 153151701006592861, guid: fd68061bc4d68104cbf83a9c2040dbcd, type: 3}
+  roundSystem: {fileID: 153151701006592861, guid: fd68061bc4d68104cbf83a9c2040dbcd, type: 3}
 --- !u!1 &1594542232
 GameObject:
   m_ObjectHideFlags: 0

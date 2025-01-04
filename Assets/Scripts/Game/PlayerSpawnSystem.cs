@@ -24,6 +24,11 @@ public class PlayerSpawnSystem : NetworkBehaviour
 
     public override void OnStartServer() => NetworkManagerLobby.OnServerReadied += SpawnPlayer;
 
+    public override void OnStartClient()
+    {
+        InputManager.Add(ActionMapNames.Player);
+    }
+
     [ServerCallback]
     private void OnDestroy()
     {

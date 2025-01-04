@@ -1,14 +1,14 @@
 {
-    "name": "Keyboard",
+    "name": "Controls",
     "maps": [
         {
             "name": "Player",
-            "id": "e12ccaf6-663d-4a89-baae-5ec7b1878cc1",
+            "id": "5f70ff6e-a4a1-4049-aa71-dde6c51c6426",
             "actions": [
                 {
                     "name": "Move",
                     "type": "Value",
-                    "id": "95d0d0e5-1b7e-4a37-ad95-f553a3f05c3e",
+                    "id": "584330ff-0e27-45e4-a6d2-8c68696be1d4",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -18,7 +18,7 @@
             "bindings": [
                 {
                     "name": "SpaceAD",
-                    "id": "bdb4269a-328f-473d-9367-dce20eb2d8dc",
+                    "id": "88da2704-c07a-4f05-9382-ef68f2e994b7",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -29,7 +29,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "083b51ae-ae13-4275-b25f-0238a09f94a6",
+                    "id": "87f58348-dda9-4bca-85a6-ff287dc25d1e",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -40,7 +40,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "db7abed2-ed2c-481c-9917-2e1c277b3d68",
+                    "id": "d6edabbd-862c-40fd-825b-d5df7f73b874",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -51,7 +51,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "8a4caaca-31b6-4483-9be1-23763d4e6f8c",
+                    "id": "6245dc5f-b7ad-4463-88ac-7101620aa860",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
